@@ -125,7 +125,7 @@ export default function Home() {
       <Layout>
         <div className="mx-auto flex flex-col gap-4">
           <h1 className="text-2xl font-bold leading-[1.1] tracking-tighter text-center">
-            {process.env.NEXT_PUBLIC_APP_NAME}
+            {process.env.NEXT_PUBLIC_APP_NAME} {process.env.NEXT_PUBLIC_MODEL_NAME===undefined ? '' : `[model:${process.env.NEXT_PUBLIC_MODEL_NAME}${process.env.NEXT_PUBLIC_MODEL_TEMPERATURE===undefined ? '' : ` temp:${process.env.NEXT_PUBLIC_MODEL_TEMPERATURE}`}]`}
           </h1>
           <main className={styles.main}>
             <div className={styles.cloud}>
