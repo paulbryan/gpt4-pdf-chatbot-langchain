@@ -10,8 +10,37 @@ import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
    Make sure to add your PDF files inside the 'docs' folder
 */
 const filePath = 'docs';
+const removeEmbeddings=async()=>{
+  console.log('removeEmbeddings');
+  const url = `https://${process.env.PINECONE_INDEX_FULLNAME ?? ''}.svc.${
+    process.env.PINECONE_ENVIRONMENT ?? ''
+  }.pinecone.io/vectors/delete?deleteAll=true&namespace=${PINECONE_NAME_SPACE}`;
+  const requestOptions: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Api-Key': process.env.PINECONE_API_KEY ?? '',
+      'Content-Type': 'application/json',
+    },
+    //body: JSON.stringify(filter),
+  };
+console.log('url', url);
+console.log('requestOptions', JSON.stringify(requestOptions));
+  try {
+    const response = await fetch(url, requestOptions);
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Response:', data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  
+}
 export const run = async () => {
+  try {await removeEmbeddings();}catch{}
   try {
     /*load raw docs from the all files in the directory */
     const directoryLoader = new DirectoryLoader(filePath, {
@@ -44,11 +73,10 @@ export const run = async () => {
     /*create and store the embeddings in the vectorStore*/
     const embeddings = new OpenAIEmbeddings();
     const index = pinecone.Index(PINECONE_INDEX_NAME); //change to your own index name
-
     //embed the PDF documents
     await PineconeStore.fromDocuments(docs, embeddings, {
-      pineconeIndex: index,
-      //namespace: PINECONE_NAME_SPACE,
+      pineconeIndex: index,      
+      namespace: PINECONE_NAME_SPACE,
       textKey: 'text',
     });
   } catch (error) {
