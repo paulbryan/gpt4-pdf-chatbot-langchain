@@ -40,13 +40,10 @@ export const makeChain = (retriever: VectorStoreRetriever) => {
   const condenseQuestionPrompt =
     ChatPromptTemplate.fromTemplate(CONDENSE_TEMPLATE);
   const answerPrompt = ChatPromptTemplate.fromTemplate(QA_TEMPLATE);
-console.log('condenseQuestionPrompt:' ,JSON.stringify(condenseQuestionPrompt));
-console.log('answerPrompt:',JSON.stringify(answerPrompt));
+
   const model = new ChatOpenAI({
-    temperature: 0, // increase temperature to get more creative answers
-    //modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
-    //modelName: 'gpt-4-1106-preview',
-    modelName: 'gpt-4',
+    temperature: Number(process.env.NEXT_PUBLIC_MODEL_TEMPERATURE ?? 0), // increase temperature to get more creative answers
+    modelName: process.env.NEXT_PUBLIC_MODEL_NAME ?? 'gpt-3.5-turbo', //change this to gpt-4 if you have access
   });
 
   // Rephrase the initial question into a dereferenced standalone question based on
