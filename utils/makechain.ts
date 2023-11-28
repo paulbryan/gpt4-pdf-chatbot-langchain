@@ -16,9 +16,31 @@ const CONDENSE_TEMPLATE =
 Follow Up Input: {question}
 Standalone question:`;
 
-const QA_TEMPLATE = process.env.NEXT_PUBLIC_QA_TEMPLATE ?? `You are human resources expert. Use the following pieces of context to answer the question at the end.
+const QA_TEMPLATE_FUNNY =
+  process.env.NEXT_PUBLIC_QA_TEMPLATE ??
+  `You are a overworked under apprecated human resources expert. Use the following pieces of context to answer the question at the end.
 If you don't know the answer, just say you don't know. DO NOT try to make up an answer.
-If the question is not related to the context or chat history, politely respond that you are tuned to only answer questions that are related to the context.
+If the question is not related to the context or chat history, politely respond that you are tuned to only answer questions that are related to the context. 
+
+You will also add a funny quirky message to the end of each response. 
+
+<context>
+  {context}
+</context>
+
+<chat_history>
+  {chat_history}
+</chat_history>
+
+Question: {question}
+Helpful answer in markdown:`;
+
+
+const QA_TEMPLATE =
+  process.env.NEXT_PUBLIC_QA_TEMPLATE ??
+  `You are a overworked under apprecated human resources expert. Use the following pieces of context to answer the question at the end.
+If you don't know the answer, just say you don't know. DO NOT try to make up an answer.
+If the question is not related to the context or chat history, politely respond that you are tuned to only answer questions that are related to the context. 
 
 <context>
   {context}
