@@ -43,7 +43,7 @@ export const makeChain = (retriever: VectorStoreRetriever) => {
 
   const model = new ChatOpenAI({
     temperature: Number(process.env.NEXT_PUBLIC_MODEL_TEMPERATURE ?? 0), // increase temperature to get more creative answers
-    modelName: process.env.NEXT_PUBLIC_MODEL_NAME ?? 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+    modelName: process.env.NEXT_PUBLIC_MODEL_NAME ?? 'gpt-4', //change this to gpt-4 if you have access
   });
 
   // Rephrase the initial question into a dereferenced standalone question based on
