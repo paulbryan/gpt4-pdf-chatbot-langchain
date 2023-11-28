@@ -23,8 +23,7 @@ const removeEmbeddings=async()=>{
     },
     //body: JSON.stringify(filter),
   };
-console.log('url', url);
-console.log('requestOptions', JSON.stringify(requestOptions));
+
   try {
     const response = await fetch(url, requestOptions);
 
@@ -67,8 +66,8 @@ export const run = async () => {
 
     /* Split text into chunks */
     const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1400,  
-      chunkOverlap: 300,
+      chunkSize: 800,  
+      chunkOverlap: 200,
     });
   
     const docs = await textSplitter.splitDocuments(rawDocs);
