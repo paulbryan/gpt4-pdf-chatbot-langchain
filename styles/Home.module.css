@@ -156,7 +156,7 @@
 }
 
 .markdownanswer code {
-  color: #15cb19;
+  /* color: #15cb19; */
   font-weight: 500;
   white-space: pre-wrap !important;
 }

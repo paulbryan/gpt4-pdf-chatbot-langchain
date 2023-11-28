@@ -49,23 +49,28 @@ export const run = async () => {
 
     // const loader = new PDFLoader(filePath);
     let rawDocs = await directoryLoader.load();
+   
+    rawDocs=rawDocs.map((doc) => {
+      doc.metadata.source=doc.metadata.source.replace(
+        'C:\\Users\\paul.bryan\\Repos\\gpt4-pdf-chatbot-langchain\\docs\\',
+        'https://hub.asggroup.com.au/bms/BMS%20Documents/',
+      );
+       doc.pageContent = doc.pageContent
+         .replace(/ {2}/g, ' ')
+         .replace(/ {2}/g, ' ')
+         .replace(/ y ears /g, ' years ')
+         .replace(/y ea rs /g, 'years ')
+         .replace(/Pr o /g, 'Pro ')
+         .replace(/ It s /g, " It's ");
+      return doc;
+    });
+
     /* Split text into chunks */
     const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      //chunkSize: 800,
-      chunkOverlap:200,
+      chunkSize: 1400,  
+      chunkOverlap: 300,
     });
-    rawDocs = rawDocs.map((doc)=>{
-      doc.pageContent = doc.pageContent
-        .replace(/ {2}/g, ' ')
-        .replace(/ {2}/g, ' ')
-        .replace(/ y ears /g, ' years ')
-        .replace(/y ea rs /g, 'years ')
-        .replace(/Pr o /g, 'Pro ')
-        .replace(/ It s /g, " It's ");
-      return doc
-    })
-    //console.log(rawDocs[10])
+  
     const docs = await textSplitter.splitDocuments(rawDocs);
     //console.log('split docs', JSON.stringify(docs));
 
@@ -75,7 +80,7 @@ export const run = async () => {
     const index = pinecone.Index(PINECONE_INDEX_NAME); //change to your own index name
     //embed the PDF documents
     await PineconeStore.fromDocuments(docs, embeddings, {
-      pineconeIndex: index,      
+      pineconeIndex: index,
       namespace: PINECONE_NAME_SPACE,
       textKey: 'text',
     });
