@@ -9,7 +9,7 @@ if (!process.env.PINECONE_INDEX_NAME) {
 const PINECONE_INDEX_NAME = process.env.PINECONE_INDEX_NAME ?? '';
 
 const PINECONE_NAME_SPACE =
-  process.env.PINECONE_NAME_SPACE ?? '' === ''
+  (process.env.PINECONE_NAME_SPACE ?? '') === ''
     ? undefined
     : process.env.PINECONE_NAME_SPACE ?? 'Default'; //namespace is optional for your vectors
 

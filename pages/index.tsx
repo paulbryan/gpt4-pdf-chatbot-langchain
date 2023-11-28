@@ -12,6 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import Link from 'next/link';
 
 export default function Home() {
   const [query, setQuery] = useState<string>('');
@@ -195,7 +196,7 @@ export default function Home() {
                                       {doc.pageContent}
                                     </ReactMarkdown>
                                     <p className="mt-2">
-                                      <b>Source:</b> {doc.metadata.source}
+                                      <b>Source:</b> {(doc.metadata.source ?? '').startsWith('http') ? <Link target='_blank' href={doc.metadata.source}>{doc.metadata.source}</Link>:doc.metadata.source}
                                     </p>
                                   </AccordionContent>
                                 </AccordionItem>
