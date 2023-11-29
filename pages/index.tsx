@@ -13,12 +13,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import Link from 'next/link';
-
+import { QA_TEMPLATE } from '@/utils/prompts';
 export default function Home() {
   const [query, setQuery] = useState<string>('');
-  const [prompt, setPrompt] = useState<string>(
-    process.env.NEXT_PUBLIC_QA_TEMPLATE ?? '',
-  );
+  const [prompt, setPrompt] = useState<string>(QA_TEMPLATE ?? '');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [messageState, setMessageState] = useState<{
