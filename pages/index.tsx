@@ -16,6 +16,9 @@ import Link from 'next/link';
 
 export default function Home() {
   const [query, setQuery] = useState<string>('');
+  const [prompt, setPrompt] = useState<string>(
+    process.env.NEXT_PUBLIC_QA_TEMPLATE ?? '',
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [messageState, setMessageState] = useState<{
@@ -37,6 +40,7 @@ export default function Home() {
 
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const textAreaRef2 = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     textAreaRef.current?.focus();
@@ -77,6 +81,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           question,
+          prompt,
           history,
         }),
       });
@@ -126,7 +131,14 @@ export default function Home() {
       <Layout>
         <div className="mx-auto flex flex-col gap-4">
           <h1 className="text-2xl font-bold leading-[1.1] tracking-tighter text-center">
-            {process.env.NEXT_PUBLIC_APP_NAME} {process.env.NEXT_PUBLIC_MODEL_NAME===undefined ? '' : `[model:${process.env.NEXT_PUBLIC_MODEL_NAME}${process.env.NEXT_PUBLIC_MODEL_TEMPERATURE===undefined ? '' : ` temp:${process.env.NEXT_PUBLIC_MODEL_TEMPERATURE}`}]`}
+            {process.env.NEXT_PUBLIC_APP_NAME}{' '}
+            {process.env.NEXT_PUBLIC_MODEL_NAME === undefined
+              ? ''
+              : `[model:${process.env.NEXT_PUBLIC_MODEL_NAME}${
+                  process.env.NEXT_PUBLIC_MODEL_TEMPERATURE === undefined
+                    ? ''
+                    : ` temp:${process.env.NEXT_PUBLIC_MODEL_TEMPERATURE}`
+                }]`}
           </h1>
           <main className={styles.main}>
             <div className={styles.cloud}>
@@ -196,7 +208,19 @@ export default function Home() {
                                       {doc.pageContent}
                                     </ReactMarkdown>
                                     <p className="mt-2">
-                                      <b>Source:</b> {(doc.metadata.source ?? '').startsWith('http') ? <Link target='_blank' href={doc.metadata.source}>{doc.metadata.source}</Link>:doc.metadata.source}
+                                      <b>Source:</b>{' '}
+                                      {(doc.metadata.source ?? '').startsWith(
+                                        'http',
+                                      ) ? (
+                                        <Link
+                                          target="_blank"
+                                          href={doc.metadata.source}
+                                        >
+                                          {doc.metadata.source}
+                                        </Link>
+                                      ) : (
+                                        doc.metadata.source
+                                      )}
                                     </p>
                                   </AccordionContent>
                                 </AccordionItem>
@@ -208,6 +232,25 @@ export default function Home() {
                     </>
                   );
                 })}
+              </div>
+            </div>
+            <div className={styles.center}>
+              <div className={styles.cloudform}>
+                <form onSubmit={handleSubmit}>
+                  <textarea
+                    disabled={loading}
+                    ref={textAreaRef2}
+                    autoFocus={false}
+                    rows={3}
+                    maxLength={1024}
+                    id="promptInput"
+                    name="promptInput"
+                    placeholder={'Enter the system prompt here (optional)'}
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    className={styles.textarea}
+                  />
+                </form>
               </div>
             </div>
             <div className={styles.center}>

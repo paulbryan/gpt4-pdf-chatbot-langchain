@@ -35,7 +35,6 @@ You will also add a funny quirky message to the end of each response.
 Question: {question}
 Helpful answer in markdown:`;
 
-
 const QA_TEMPLATE =
   process.env.NEXT_PUBLIC_QA_TEMPLATE ??
   `You are a overworked under apprecated human resources expert. Use the following pieces of context to answer the question at the end.
@@ -58,10 +57,15 @@ const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
   return serializedDocs.join(separator);
 };
 
-export const makeChain = (retriever: VectorStoreRetriever) => {
+export const makeChain = (
+  retriever: VectorStoreRetriever,
+  promptOverride?: string,
+) => {
   const condenseQuestionPrompt =
     ChatPromptTemplate.fromTemplate(CONDENSE_TEMPLATE);
-  const answerPrompt = ChatPromptTemplate.fromTemplate(QA_TEMPLATE);
+  const answerPrompt = ChatPromptTemplate.fromTemplate(
+    promptOverride ?? QA_TEMPLATE,
+  );
 
   const model = new ChatOpenAI({
     temperature: Number(process.env.NEXT_PUBLIC_MODEL_TEMPERATURE ?? 0), // increase temperature to get more creative answers

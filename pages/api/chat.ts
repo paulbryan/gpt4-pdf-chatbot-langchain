@@ -10,8 +10,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { question, history } = req.body;
-
+  const { question, history, prompt } = req.body;
+  console.log('prompt', prompt);
   console.log('question', question);
   console.log('history', history);
 
@@ -54,9 +54,11 @@ export default async function handler(
         },
       ],
     });
-    
+
     //create chain
-    const chain = makeChain(retriever);
+    const promptOverride: string | undefined =
+      (prompt ?? '') === '' ? undefined : prompt;
+    const chain = makeChain(retriever, promptOverride);
 
     const pastMessages = history
       .map((message: [string, string]) => {
